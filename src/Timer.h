@@ -15,9 +15,9 @@ private:
 public:
     Timer();
     void restart();
-    void log(const char* message);
-    void log(const char* message, size_t n);
-    std::chrono::microseconds getDelta();
+    void log(const char* message) const;
+    void log(const char* message, size_t n) const;
+    std::chrono::microseconds getDelta() const;
 
     static std::chrono::microseconds getTime();
 };

@@ -15,15 +15,15 @@ void Timer::restart() {
     startTime = getTime();
 }
 
-void Timer::log(const char* message) {
+void Timer::log(const char* message) const {
     fprintf(stderr, "%s in %d us\n", message, getDelta());
 }
 
-void Timer::log(const char *message, size_t const n) {
+void Timer::log(const char *message, size_t const n) const {
     fprintf(stderr, "%s in %f us (%lu samples)\n", message, getDelta() / (double)n, n);
 }
 
-microseconds Timer::getDelta() {
+microseconds Timer::getDelta() const {
     return duration_cast<microseconds>(
             getTime() - startTime
     );
