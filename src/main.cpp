@@ -1,9 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
-#include <Eigen/Eigenvalues>
-#include <laswriter.hpp>
-#include <lasreader.hpp>
 #include "containers/Point3d.h"
 #include "KDTree.h"
 #include "Timer.h"
