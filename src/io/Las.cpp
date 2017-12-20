@@ -41,18 +41,23 @@ const std::vector<Point3d>& Las::getPoints() const {
     return points;
 }
 
-void Las::savePoints(const char* const outputFilename, const Vector3d* const normals[]) const {
+void Las::savePoints(const char* const outputFilename,
+                     const bool* const included,
+                     const std::vector<Vector3d>& normals) const {
     LASreadOpener readerOpener;
     LASreader* const reader = readerOpener.open(inputFilename);
     LASwriteOpener writerOpener;
     writerOpener.set_file_name(outputFilename);
     LASwriter* const writer = writerOpener.open(&reader->header);
 
+    std::vector<Vector3d>::const_iterator iterator = normals.begin();
     for (int i = 0; reader->read_point(); i++) {
-        const Vector3d* const normal = normals[i];
-        if (normal == nullptr) continue;
-        // TODO: add normal to point
-        writer->write_point(&reader->point);
+        if (included[i]) {
+            const Vector3d& normal = *iterator;
+            iterator++;
+            // TODO: add normal to point
+            writer->write_point(&reader->point);
+        }
     }
 
     reader->close();

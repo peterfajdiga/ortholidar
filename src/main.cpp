@@ -18,7 +18,9 @@
 
 
 
-void calculateNormals(const std::vector<Point3d>& points, const Vector3d* normals[]) {
+void calculateNormals(const std::vector<Point3d>& points,
+                      bool* const included,
+                      std::vector<Vector3d>& normals) {
     KDTree* tree = KDTree::createTree(points);
     Eigen::Matrix3d covarianceMatrix;
     double& cov00 = covarianceMatrix(0,0);
@@ -68,13 +70,14 @@ void calculateNormals(const std::vector<Point3d>& points, const Vector3d* normal
             continue;
         } else {
             const Eigen::Matrix3d& eigenvectors = eigensolver.eigenvectors();
-            Vector3d* const normal = new Vector3d(
+            Vector3d normal(
                     eigenvectors(0,0),
                     eigenvectors(1,0),
                     eigenvectors(2,0)
             );
-            normal->pointUp();
-            normals[i] = normal;
+            normal.pointUp();
+            normals.push_back(normal);
+            included[i] = true;
         }
     }
     delete tree;
@@ -86,16 +89,16 @@ int main() {
     const std::vector<Point3d>& points = las.getPoints();
 
     std::vector<Point3d>::size_type const n = points.size();
-    const Vector3d** normals = new const Vector3d*[n];
+    bool* included = new bool[n];
     for (int i = 0; i < n; i++) {
-        normals[i] = nullptr;
+        included[i] = false;
     }
-    calculateNormals(points, normals);
 
-    las.savePoints(OUTPUT_FILENAME, normals);
-    for (int i = 0; i < n; i++) {
-        delete normals[i];
-    }
-    delete normals;
+    std::vector<Vector3d> normals;
+    calculateNormals(points, included, normals);
+
+    las.savePoints(OUTPUT_FILENAME, included, normals);
+
+    delete[] included;
     return 0;
 }

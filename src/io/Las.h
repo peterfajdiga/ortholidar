@@ -20,7 +20,9 @@ private:
 public:
     Las(const char* inputFilename);
     const std::vector<Point3d>& getPoints() const;
-    void savePoints(const char* outputFilename, const Vector3d* const normals[]) const;
+    void savePoints(const char* outputFilename,
+                    const bool* included,
+                    const std::vector<Vector3d>& normals) const;
 };
 
 
