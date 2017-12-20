@@ -51,7 +51,7 @@ void Las::savePoints(const char* const outputFilename,
     LASwriter* const writer = writerOpener.open(&reader->header);
 
     std::vector<Vector3d>::const_iterator iterator = normals.begin();
-    for (int i = 0; reader->read_point(); i++) {
+    for (size_t i = 0; reader->read_point(); i++) {
         if (included[i]) {
             const Vector3d& normal = *iterator;
             iterator++;

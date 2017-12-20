@@ -34,7 +34,7 @@ void calculateNormals(const std::vector<Point3d>& points,
     double& cov22 = covarianceMatrix(2,2);
 
     std::vector<Point3d>::size_type const n = points.size();
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         const Point3d& p = points[i];
         std::vector<const Point3d*> const neighborhood = tree->getNeighbors(p, NORMAL_RADIUS);
         if (neighborhood.empty()) {
@@ -90,7 +90,7 @@ int main() {
 
     std::vector<Point3d>::size_type const n = points.size();
     bool* included = new bool[n];
-    for (int i = 0; i < n; i++) {
+    for (size_t i = 0; i < n; i++) {
         included[i] = false;
     }
 
