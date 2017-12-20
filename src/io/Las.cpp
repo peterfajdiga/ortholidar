@@ -8,9 +8,10 @@
 
 Las::Las(const char* inputFilename) {
     this->inputFilename = inputFilename;
+    readPoints();
 }
 
-void Las::readPoints(std::vector<Point3d>& outPoints) const {
+void Las::readPoints() {
     LASreadOpener readerOpener;
     LASreader* const reader = readerOpener.open(inputFilename);
 
@@ -21,9 +22,10 @@ void Las::readPoints(std::vector<Point3d>& outPoints) const {
     double const y_scale  = reader->header.y_scale_factor;
     double const z_scale  = reader->header.z_scale_factor;
 
+    points.clear();
     while (reader->read_point()) {
         const LASpoint& p = reader->point;
-        outPoints.push_back(Point3d(
+        points.push_back(Point3d(
                 p.get_X() * x_scale + x_offset,
                 p.get_Y() * y_scale + y_offset,
                 p.get_Z() * z_scale + z_offset
@@ -32,6 +34,11 @@ void Las::readPoints(std::vector<Point3d>& outPoints) const {
 
     reader->close();
     delete reader;
+}
+
+
+const std::vector<Point3d>& Las::getPoints() const {
+    return points;
 }
 
 void Las::savePoints(const char* const outputFilename, const Vector3d* const normals[]) const {

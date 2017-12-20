@@ -13,10 +13,13 @@
 class Las {
 private:
     const char* inputFilename;
+    std::vector<Point3d> points;
+
+    void readPoints();
 
 public:
     Las(const char* inputFilename);
-    void readPoints(std::vector<Point3d>& outPoints) const;
+    const std::vector<Point3d>& getPoints() const;
     void savePoints(const char* outputFilename, const Vector3d* const normals[]) const;
 };
 

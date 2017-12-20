@@ -83,8 +83,7 @@ void calculateNormals(const std::vector<Point3d>& points, const Vector3d* normal
 
 int main() {
     const Las las(INPUT_FILENAME);
-    std::vector<Point3d> points;
-    las.readPoints(points);
+    const std::vector<Point3d>& points = las.getPoints();
 
     std::vector<Point3d>::size_type const n = points.size();
     const Vector3d** normals = new const Vector3d*[n];
