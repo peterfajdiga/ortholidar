@@ -7,11 +7,7 @@
 
 typedef std::vector<const Point3d*>::iterator pIter;
 
-KDTree::KDTree(const Point3d* const p,
-               int const axis) {
-    this->p = p;
-    this->axis = axis;
-}
+KDTree::KDTree(const Point3d& p, int const axis) : p(p), axis(axis) {}
 
 KDTree::~KDTree() {
     delete left;
@@ -55,7 +51,7 @@ KDTree* KDTree::createTree(std::vector<const Point3d*>& points,
     std::sort(start, end, Point3d::comparators[axis]);
     pIter const median = start + n/2;
 
-    KDTree* const newNode = new KDTree(*median, axis);
+    KDTree* const newNode = new KDTree(**median, axis);
     newNode->left  = createTree(points, start, median, depth + 1);
     newNode->right = createTree(points, median+1, end, depth + 1);
     return newNode;
@@ -68,7 +64,7 @@ std::vector<const Point3d*> KDTree::getNeighbors(const Point3d& target, double c
 }
 
 void KDTree::getNeighbors(std::vector<const Point3d*>& neighbors, const Point3d& target, double const radius) {
-    double const thisPos = p->coords[axis];
+    double const thisPos = p.coords[axis];
     double const targetPos = target.coords[axis];
 
     bool const  leftOfTarget = thisPos <= targetPos + radius;
@@ -79,7 +75,7 @@ void KDTree::getNeighbors(std::vector<const Point3d*>& neighbors, const Point3d&
     if (rightOfTarget && left != nullptr) {
         left->getNeighbors(neighbors, target, radius);
     }
-    if (leftOfTarget && rightOfTarget && p != &target && p->distSqTo(target) <= radius*radius) {
-        neighbors.push_back(p);
+    if (leftOfTarget && rightOfTarget && &p != &target && p.distSqTo(target) <= radius*radius) {
+        neighbors.push_back(&p);
     }
 }

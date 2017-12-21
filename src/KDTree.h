@@ -12,7 +12,7 @@
 
 class KDTree {
 private:
-    const Point3d* p;
+    const Point3d& p;
     KDTree* left;
     KDTree* right;
     int axis;
@@ -20,7 +20,7 @@ private:
     static int const k = 3;
 
 public:
-    KDTree(const Point3d* p, int axis);
+    KDTree(const Point3d& p, int axis);
     ~KDTree();
 
     static KDTree* createTree(const std::vector<Point3d>& points);
