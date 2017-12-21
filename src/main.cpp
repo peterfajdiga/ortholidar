@@ -15,9 +15,8 @@
 
 
 
-void calculateNormals(const std::vector<Point3d>& points,
-                      bool* const included,
-                      std::vector<Vector3d>& normals) {
+void calculateNormals(Las& las) {
+    std::vector<const Point3d*> points = las.getPoints();
     KDTree* tree = KDTree::createTree(points);
     Eigen::Matrix3d covarianceMatrix;
     double& cov00 = covarianceMatrix(0,0);
@@ -30,9 +29,9 @@ void calculateNormals(const std::vector<Point3d>& points,
     double& cov21 = covarianceMatrix(2,1);
     double& cov22 = covarianceMatrix(2,2);
 
-    std::vector<Point3d>::size_type const n = points.size();
+    size_t n = las.size();
     for (size_t i = 0; i < n; i++) {
-        const Point3d& p = points[i];
+        const Point3d& p = las[i];
         std::vector<const Point3d*> const neighborhood = tree->getNeighbors(p, NORMAL_RADIUS);
         if (neighborhood.empty()) {
             // p is noise, don't add normal
@@ -67,14 +66,13 @@ void calculateNormals(const std::vector<Point3d>& points,
             continue;
         } else {
             const Eigen::Matrix3d& eigenvectors = eigensolver.eigenvectors();
-            Vector3d normal(
+            Vector3d* normal = new Vector3d(
                     eigenvectors(0,0),
                     eigenvectors(1,0),
                     eigenvectors(2,0)
             );
-            normal.pointUp();
-            normals.push_back(normal);
-            included[i] = true;
+            normal->pointUp();
+            las.setNormal(i, normal);
         }
     }
     delete tree;
@@ -82,20 +80,9 @@ void calculateNormals(const std::vector<Point3d>& points,
 
 
 int main() {
-    const Las las(INPUT_FILENAME);
-    const std::vector<Point3d>& points = las.getPoints();
+    Las las(INPUT_FILENAME);
+    calculateNormals(las);
+    las.save(OUTPUT_FILENAME);
 
-    std::vector<Point3d>::size_type const n = points.size();
-    bool* included = new bool[n];
-    for (size_t i = 0; i < n; i++) {
-        included[i] = false;
-    }
-
-    std::vector<Vector3d> normals;
-    calculateNormals(points, included, normals);
-
-    las.savePoints(OUTPUT_FILENAME, included, normals);
-
-    delete[] included;
     return 0;
 }

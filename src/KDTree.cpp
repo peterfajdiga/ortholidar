@@ -24,7 +24,7 @@ KDTree* KDTree::createTree(const std::vector<Point3d>& pointsOrig) {
     for (size_t i = 0; i < n; i++) {
         points[i] = &pointsOrig[i];
     }
-    return createTree(points, points.begin(), points.end(), 0);
+    return createTree(points);
 }
 
 KDTree* KDTree::createTree(const std::vector<Point3d*>& pointsOrig) {
@@ -33,6 +33,10 @@ KDTree* KDTree::createTree(const std::vector<Point3d*>& pointsOrig) {
     for (size_t i = 0; i < n; ++i) {
         points[i] = pointsOrig[i];
     }
+    return createTree(points);
+}
+
+KDTree* KDTree::createTree(std::vector<const Point3d*>& points) {
     return createTree(points, points.begin(), points.end(), 0);
 }
 
