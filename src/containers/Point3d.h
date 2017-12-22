@@ -14,6 +14,7 @@ public:
     double& z = coords[2];
 
     Point3d(double x, double y, double z);
+    Point3d(const Point3d& src);
 
     Point3d& operator=(const Point3d& src);
 

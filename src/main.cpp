@@ -1,14 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
+#include <png++/png.hpp>
 #include "containers/Point3d.h"
 #include "KDTree.h"
 #include "Timer.h"
 #include "containers/Vector3d.h"
 #include "io/Las.h"
+#include "containers/Color.h"
 
 
-#define INPUT_FILENAME "../data/GKR_419_125.laz"
+#define INPUT_LAS_FILENAME "../data/GKR_419_125.laz"
+#define INPUT_PNG_FILENAME "../data/GKR_419_125.png"
 #define OUTPUT_FILENAME "../data/output.laz"
 #define NORMAL_RADIUS 10.0
 #define NOISE_THRESHOLD 200.0
@@ -78,10 +81,28 @@ void calculateNormals(Las& las) {
     delete tree;
 }
 
+void colorPoints(Las& las, const char* const pngFilename) {
+    png::image<png::rgb_pixel_16> orthophoto(pngFilename);
+
+    size_t const n = las.size();
+    for (size_t i = 0; i < n; i++) {
+        if (las.isIncluded(i)) {
+            const Point3d& p = las[i];
+            double const x01 =     (p.x - las.minX) / (las.maxX - las.minX);
+            double const y01 = 1 - (p.y - las.minY) / (las.maxY - las.minY);
+            double const pngX = x01 * (orthophoto.get_width()  - 1);
+            double const pngY = y01 * (orthophoto.get_height() - 1);
+            const png::rgb_pixel_16 pixel = orthophoto.get_pixel(pngX, pngY);
+            las.setColor(i, new Color(pixel.red, pixel.green, pixel.blue));
+        }
+    }
+}
+
 
 int main() {
-    Las las(INPUT_FILENAME);
-    calculateNormals(las);
+    Las las(INPUT_LAS_FILENAME);
+//    calculateNormals(las);
+    colorPoints(las, INPUT_PNG_FILENAME);
     las.save(OUTPUT_FILENAME);
 
     return 0;

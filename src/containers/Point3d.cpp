@@ -5,13 +5,12 @@
 #include <cmath>
 #include "Point3d.h"
 
-Point3d::Point3d(double const x, double const y, double const z) {
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
+Point3d::Point3d(double const x, double const y, double const z) : coords{x, y, z} {}
 
-Point3d &Point3d::operator=(const Point3d& src) {
+// maintain x y z references
+Point3d::Point3d(const Point3d& src) : coords{src.x, src.y, src.z}, x(coords[0]), y(coords[1]), z(coords[2]) {}
+
+Point3d& Point3d::operator=(const Point3d& src) {
     x = src.x;
     y = src.y;
     z = src.z;
