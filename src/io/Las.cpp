@@ -11,12 +11,6 @@ Las::Las(const char* inputFilename) {
     readPoints();
 }
 
-Las::Las(const Las &src) :
-        inputFilename(src.inputFilename),
-        entries(src.entries),
-        p_minX(src.p_minX), p_minY(src.p_minY), p_maxX(src.p_maxX), p_maxY(src.p_maxY),
-          minX(    p_minX),   minY(    p_minY),   maxX(    p_maxX),   maxY(    p_maxY) {}
-
 void Las::readPoints() {
     LASreadOpener readerOpener;
     LASreader* const reader = readerOpener.open(inputFilename);
@@ -29,10 +23,10 @@ void Las::readPoints() {
     double const y_scale  = header.y_scale_factor;
     double const z_scale  = header.z_scale_factor;
 
-    p_minX = header.min_x;
-    p_minY = header.min_y;
-    p_maxX = header.max_x;
-    p_maxY = header.max_y;
+    minX = header.min_x;
+    minY = header.min_y;
+    maxX = header.max_x;
+    maxY = header.max_y;
 
     entries.clear();
     while (reader->read_point()) {
@@ -46,6 +40,20 @@ void Las::readPoints() {
 
     reader->close();
     delete reader;
+}
+
+
+double Las::getMinX() {
+    return minX;
+}
+double Las::getMinY() {
+    return minX;
+}
+double Las::getMaxX() {
+    return minX;
+}
+double Las::getMaxY() {
+    return minX;
 }
 
 

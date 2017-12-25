@@ -29,18 +29,17 @@ private:
 private:
     const char* inputFilename;
     std::vector<Entry> entries;
-    double p_minX, p_minY, p_maxX, p_maxY;
+    double minX, minY, maxX, maxY;
 
     void readPoints();
 
 public:
-    const double& minX = p_minX;
-    const double& minY = p_minY;
-    const double& maxX = p_maxX;
-    const double& maxY = p_maxY;
+    double getMinX();
+    double getMinY();
+    double getMaxX();
+    double getMaxY();
 
     Las(const char* inputFilename);
-    Las(const Las& src);
 
     size_t size() const;
     const Point3d& operator[](size_t i) const;

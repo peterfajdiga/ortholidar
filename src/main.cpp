@@ -88,8 +88,8 @@ void colorPoints(Las& las, const char* const pngFilename) {
     for (size_t i = 0; i < n; i++) {
         if (las.isIncluded(i)) {
             const Point3d& p = las[i];
-            double const x01 =     (p.x - las.minX) / (las.maxX - las.minX);
-            double const y01 = 1 - (p.y - las.minY) / (las.maxY - las.minY);
+            double const x01 =     (p.x - las.getMinX()) / (las.getMaxX() - las.getMinX());
+            double const y01 = 1 - (p.y - las.getMinY()) / (las.getMaxY() - las.getMinY());
             double const pngX = x01 * (orthophoto.get_width()  - 1);
             double const pngY = y01 * (orthophoto.get_height() - 1);
             const png::rgb_pixel_16 pixel = orthophoto.get_pixel(pngX, pngY);
