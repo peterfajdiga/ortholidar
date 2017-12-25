@@ -64,8 +64,8 @@ std::vector<const Point3d*> KDTree::getNeighbors(const Point3d& target, double c
 }
 
 void KDTree::getNeighbors(std::vector<const Point3d*>& neighbors, const Point3d& target, double const radius) {
-    double const thisPos = p.coords[axis];
-    double const targetPos = target.coords[axis];
+    double const thisPos = p.coord(axis);
+    double const targetPos = target.coord(axis);
 
     bool const  leftOfTarget = thisPos <= targetPos + radius;
     bool const rightOfTarget = thisPos >= targetPos - radius;

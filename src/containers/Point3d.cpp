@@ -5,10 +5,24 @@
 #include <cmath>
 #include "Point3d.h"
 
-Point3d::Point3d(double const x, double const y, double const z) : coords{x, y, z} {}
+double& Point3d::coord(int const i) {
+    switch (i) {
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        default: throw 111;  // TODO: define exception
+    }
+}
+const double& Point3d::coord(int const i) const {
+    switch (i) {
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        default: throw 111;  // TODO: define exception
+    }
+}
 
-// maintain x y z references
-Point3d::Point3d(const Point3d& src) : coords{src.x, src.y, src.z}, x(coords[0]), y(coords[1]), z(coords[2]) {}
+Point3d::Point3d(double const x, double const y, double const z) : x(x), y(y), z(z) {}
 
 Point3d& Point3d::operator=(const Point3d& src) {
     x = src.x;

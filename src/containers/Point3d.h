@@ -8,13 +8,13 @@
 
 class Point3d {
 public:
-    double coords[3];
-    double& x = coords[0];
-    double& y = coords[1];
-    double& z = coords[2];
+    double x;
+    double y;
+    double z;
+    double& coord(int i);  // i-th coordinate
+    const double& coord(int i) const;  // i-th coordinate
 
     Point3d(double x, double y, double z);
-    Point3d(const Point3d& src);
 
     Point3d& operator=(const Point3d& src);
 

@@ -109,7 +109,7 @@ void Las::save(const char* const outputFilename) const {
         case 3:
         case 5: break;  // already the correct format
         default: {
-            throw 124;  // TODO
+            throw 124;  // TODO: define exception
         }
     }
 
