@@ -97,29 +97,9 @@ void Las::save(const char* const outputFilename) const {
 
     LASheader outHeader = reader->header;
     outHeader.unlink();
-    switch (outHeader.point_data_format) {
-        case 0: {
-            outHeader.point_data_format = 2;
-            outHeader.point_data_record_length += 6;
-            break;
-        }
-        case 1: {
-            outHeader.point_data_format = 3;
-            outHeader.point_data_record_length += 6;
-            break;
-        }
-        case 4: {
-            outHeader.point_data_format = 5;
-            outHeader.point_data_record_length += 6;
-            break;
-        }
-        case 2:
-        case 3:
-        case 5: break;  // already the correct format
-        default: {
-            throw 124;  // TODO: define exception
-        }
-    }
+
+    outHeader.point_data_format = 5;
+    outHeader.point_data_record_length = 63;
 
     LASpoint point;
     if (outHeader.laszip) {
@@ -140,10 +120,17 @@ void Las::save(const char* const outputFilename) const {
         const Entry& entry = entries[i];
         if (entry.included) {
             point = reader->point;
+
+            // add color
             point.rgb[0] = entry.color->r;
             point.rgb[1] = entry.color->g;
             point.rgb[2] = entry.color->b;
-            // TODO: add normal to laspoint
+
+            // add normal
+            point.set_x(entry.normal->x);
+            point.set_y(entry.normal->y);
+            point.set_z(entry.normal->z);
+
             writer->write_point(&point);
         }
     }

@@ -16,7 +16,7 @@ class Las {
 private:
     class Entry {
     public:
-        bool included = true;  // TODO: false
+        bool included = false;
         const Point3d point;
         const Vector3d* normal = nullptr;
         const Color* color = nullptr;

@@ -108,7 +108,7 @@ void colorPoints(Las& las, const char* const pngFilename) {
 
 int main() {
     Las las(INPUT_LAS_FILENAME);
-//    calculateNormals(las);
+    calculateNormals(las);
     colorPoints(las, INPUT_PNG_FILENAME);
     las.save(OUTPUT_FILENAME);
 
