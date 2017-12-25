@@ -8,6 +8,7 @@
 #include "containers/Vector3d.h"
 #include "io/Las.h"
 #include "containers/Color.h"
+#include "misc.h"
 
 
 #define INPUT_LAS_FILENAME "../data/GKR_419_125.laz"
@@ -90,9 +91,15 @@ void colorPoints(Las& las, const char* const pngFilename) {
             const Point3d& p = las[i];
             double const x01 =     (p.x - las.getMinX()) / (las.getMaxX() - las.getMinX());
             double const y01 = 1 - (p.y - las.getMinY()) / (las.getMaxY() - las.getMinY());
-            double const pngX = x01 * (orthophoto.get_width()  - 1);
-            double const pngY = y01 * (orthophoto.get_height() - 1);
-            const png::rgb_pixel_16 pixel = orthophoto.get_pixel(pngX, pngY);
+            double const pngX = x01 * (orthophoto.get_width()  - 1);  // x coordinate in png space
+            double const pngY = y01 * (orthophoto.get_height() - 1);  // y coordinate in png space
+            png::rgb_pixel_16 const pixelLowXLowY   = orthophoto.get_pixel(floor(pngX), floor(pngY));
+            png::rgb_pixel_16 const pixelLowXHighY  = orthophoto.get_pixel(floor(pngX), ceil (pngY));
+            png::rgb_pixel_16 const pixelHighXLowY  = orthophoto.get_pixel(ceil (pngX), floor(pngY));
+            png::rgb_pixel_16 const pixelHighXHighY = orthophoto.get_pixel(ceil (pngX), ceil (pngY));
+            png::rgb_pixel_16 const pixelLowX  = misc::lerpPixel(pixelLowXLowY,  pixelLowXHighY,  misc::frac(y01));
+            png::rgb_pixel_16 const pixelHighX = misc::lerpPixel(pixelHighXLowY, pixelHighXHighY, misc::frac(y01));
+            png::rgb_pixel_16 const pixel = misc::lerpPixel(pixelLowX, pixelHighX, misc::frac(x01));
             las.setColor(i, new Color(pixel.red, pixel.green, pixel.blue));
         }
     }

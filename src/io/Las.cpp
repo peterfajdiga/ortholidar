@@ -47,13 +47,13 @@ double Las::getMinX() {
     return minX;
 }
 double Las::getMinY() {
-    return minX;
+    return minY;
 }
 double Las::getMaxX() {
-    return minX;
+    return maxX;
 }
 double Las::getMaxY() {
-    return minX;
+    return maxY;
 }
 
 
