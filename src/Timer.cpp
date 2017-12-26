@@ -16,11 +16,11 @@ void Timer::restart() {
 }
 
 void Timer::log(const char* message) const {
-    fprintf(stderr, "%s in %d us\n", message, getDelta());
+    fprintf(stderr, "%s in %lf s\n", message, getDelta() / 1e6);
 }
 
 void Timer::log(const char *message, size_t const n) const {
-    fprintf(stderr, "%s in %f us (%lu samples)\n", message, getDelta() / (double)n, n);
+    fprintf(stderr, "%s in %lf s (%lu samples)\n", message, getDelta() / 1e6 / n, n);
 }
 
 microseconds Timer::getDelta() const {
