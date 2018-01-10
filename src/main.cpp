@@ -14,8 +14,14 @@
 
 
 void calculateNormals(Las& las) {
+    const Timer timer;
+
     std::vector<const Point3d*> points = las.getPoints();
+    timer.log("read las file");
+
     KDTree* tree = KDTree::createTree(points);
+    timer.log("built tree");
+
     Eigen::Matrix3d covarianceMatrix;
     double& cov00 = covarianceMatrix(0,0);
     double& cov01 = covarianceMatrix(0,1);
@@ -74,6 +80,8 @@ void calculateNormals(Las& las) {
         }
     }
     delete tree;
+
+    timer.log("normals calculated");
 }
 
 void colorPoints(Las& las, const char* const pngFilename) {
