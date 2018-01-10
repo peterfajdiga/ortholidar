@@ -5,15 +5,9 @@
 #include "containers/Point3d.h"
 #include "KDTree.h"
 #include "Timer.h"
-#include "containers/Vector3d.h"
-#include "io/Las.h"
-#include "containers/Color.h"
 #include "misc.h"
 
 
-#define INPUT_LAS_FILENAME "../data/GKR_419_125.laz"
-#define INPUT_PNG_FILENAME "../data/GKR_419_125.png"
-#define OUTPUT_FILENAME "../data/output.laz"
 #define NORMAL_RADIUS 10.0
 #define NOISE_THRESHOLD 200.0
 
@@ -106,11 +100,16 @@ void colorPoints(Las& las, const char* const pngFilename) {
 }
 
 
-int main() {
-    Las las(INPUT_LAS_FILENAME);
+int main(int const argc, const char* const argv[]) {
+    if (argc != 4) {
+        std::cerr << "Usage: ortholidar LASFILE ORTHOPHOTO OUTPUTFILE\n";
+        exit(1);  // TODO: define error code
+    }
+
+    Las las(argv[1]);
     calculateNormals(las);
-    colorPoints(las, INPUT_PNG_FILENAME);
-    las.save(OUTPUT_FILENAME);
+    colorPoints(las, argv[2]);
+    las.save(argv[3]);
 
     return 0;
 }
