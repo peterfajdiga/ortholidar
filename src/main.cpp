@@ -33,8 +33,13 @@ void calculateNormals(Las& las) {
     double& cov21 = covarianceMatrix(2,1);
     double& cov22 = covarianceMatrix(2,2);
 
+    const Timer timerLoop;
     size_t n = las.size();
     for (size_t i = 0; i < n; i++) {
+        if (i % 10000 == 0) {
+            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s", i, n, timerLoop.getDelta() / 1e6 / i);
+        }
+
         const Point3d& p = las[i];
         std::vector<const Point3d*> const neighborhood = tree->getNeighbors(p, NORMAL_RADIUS);
         if (neighborhood.empty()) {
@@ -81,7 +86,7 @@ void calculateNormals(Las& las) {
     }
     delete tree;
 
-    timer.log("normals calculated");
+    timer.log("\nnormals calculated");
 }
 
 void colorPoints(Las& las, const char* const pngFilename) {
