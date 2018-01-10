@@ -14,13 +14,13 @@
 
 
 void calculateNormals(Las& las) {
-    const Timer timer;
+    const Timer timer;  // progress reporting
 
     std::vector<const Point3d*> points = las.getPoints();
-    timer.log("read las file");
+    timer.log("read las file");  // progress reporting
 
     KDTree* tree = KDTree::createTree(points);
-    timer.log("built tree");
+    timer.log("built tree");  // progress reporting
 
     Eigen::Matrix3d covarianceMatrix;
     double& cov00 = covarianceMatrix(0,0);
@@ -33,11 +33,15 @@ void calculateNormals(Las& las) {
     double& cov21 = covarianceMatrix(2,1);
     double& cov22 = covarianceMatrix(2,2);
 
-    const Timer timerLoop;
+    Timer const timerLoop;  // progress reporting
+    size_t neighbors = 0;  // progress reporting
     size_t n = las.size();
     for (size_t i = 0; i < n; i++) {
         if (i % 10000 == 0) {
-            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s", i, n, timerLoop.getDelta() / 1e6 / i);
+            // progress reporting (the whole if-block)
+            double const avgNeighbors = (double)neighbors / i;
+            neighbors = 0;
+            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s. Average neighbors: %lf.", i, n, timerLoop.getDelta() / 1e6 / i, avgNeighbors);
         }
 
         const Point3d& p = las[i];
@@ -46,6 +50,7 @@ void calculateNormals(Las& las) {
             // p is noise, don't add normal
             continue;
         }
+        neighbors += neighborhood.size();  // progress reporting
         covarianceMatrix.setZero();  // zero initialize
         for (const Point3d* neighbor : neighborhood) {
             double const x = neighbor->x - p.x;
@@ -86,7 +91,7 @@ void calculateNormals(Las& las) {
     }
     delete tree;
 
-    timer.log("\nnormals calculated");
+    timer.log("\rnormals calculated");  // progress reporting
 }
 
 void colorPoints(Las& las, const char* const pngFilename) {
