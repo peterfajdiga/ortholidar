@@ -63,3 +63,5 @@ cmake-build-release/
 
 # Data
 data/
+loader/*.laz
+loader/*.png
