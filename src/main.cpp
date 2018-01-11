@@ -6,6 +6,35 @@
 
 
 
+void printNeighborhoodNormals(const Las& las, size_t const index, const char* const filename) {
+    std::vector<const Point3d*> points = las.getPoints();
+    const KDTree* tree = KDTree::createTree(points);
+    const std::vector<const Point3d*> neighborhood = tree->getNeighbors(las[index], normals::NORMAL_RADIUS);
+    std::vector<Vector3d*> normals;
+    for (const Point3d* const p : neighborhood) {
+        normals.push_back(normals::calculateNormal(tree, *p));
+    }
+
+    FILE* outFile = fopen(filename, "w");
+    if (outFile == nullptr) {
+        fprintf(stderr, "Error opening file %s\n", filename);
+        exit(1);
+    }
+
+    fprintf(outFile, "Points:\n");
+    for (const Point3d* const p : neighborhood) {
+        fprintf(outFile, "%lf, %lf, %lf\n", p->x, p->y, p->z);
+    }
+
+    fprintf(outFile, "Normals:\n");
+    for (const Vector3d* const n : normals) {
+        fprintf(outFile, "%lf, %lf, %lf\n", n->x, n->y, n->z);
+        delete n;
+    }
+
+    fclose(outFile);
+}
+
 void colorPoints(Las& las, const char* const pngFilename) {
     png::image<png::rgb_pixel_16> orthophoto(pngFilename);
 
