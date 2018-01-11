@@ -111,9 +111,9 @@ void colorPoints(Las& las, const char* const pngFilename) {
             png::rgb_pixel_16 const pixelLowXHighY  = orthophoto.get_pixel(floor(pngX), ceil (pngY));
             png::rgb_pixel_16 const pixelHighXLowY  = orthophoto.get_pixel(ceil (pngX), floor(pngY));
             png::rgb_pixel_16 const pixelHighXHighY = orthophoto.get_pixel(ceil (pngX), ceil (pngY));
-            png::rgb_pixel_16 const pixelLowX  = misc::lerpPixel(pixelLowXLowY,  pixelLowXHighY,  misc::frac(y01));
-            png::rgb_pixel_16 const pixelHighX = misc::lerpPixel(pixelHighXLowY, pixelHighXHighY, misc::frac(y01));
-            png::rgb_pixel_16 const pixel = misc::lerpPixel(pixelLowX, pixelHighX, misc::frac(x01));
+            png::rgb_pixel_16 const pixelLowX  = misc::lerpPixel(pixelLowXLowY,  pixelLowXHighY,  misc::frac(pngY));
+            png::rgb_pixel_16 const pixelHighX = misc::lerpPixel(pixelHighXLowY, pixelHighXHighY, misc::frac(pngY));
+            png::rgb_pixel_16 const pixel = misc::lerpPixel(pixelLowX, pixelHighX, misc::frac(pngX));
             las.setColor(i, new Color(pixel.red, pixel.green, pixel.blue));
         }
     }
