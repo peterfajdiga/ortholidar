@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-project(Ortholidar)
+project(ortholidar)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Ortholidar src/main.cpp src/containers/Point3d.cpp src/containers/Point3d.h src/KDTree.cpp src/KDTree.h src/Timer.cpp src/Timer.h src/containers/Vector3d.cpp src/containers/Vector3d.h src/io/Las.cpp src/io/Las.h src/containers/Color.h src/misc.cpp src/misc.h)
+add_executable(ortholidar src/main.cpp src/containers/Point3d.cpp src/containers/Point3d.h src/KDTree.cpp src/KDTree.h src/Timer.cpp src/Timer.h src/containers/Vector3d.cpp src/containers/Vector3d.h src/io/Las.cpp src/io/Las.h src/containers/Color.h src/misc.cpp src/misc.h)
 
 
-target_link_libraries(Ortholidar laslib stdc++ m)
-target_include_directories(Ortholidar PUBLIC /usr/include/laslib)
+target_link_libraries(ortholidar laslib stdc++ m)
+target_include_directories(ortholidar PUBLIC /usr/include/laslib)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DEPS REQUIRED eigen3 libpng)
-target_link_libraries(Ortholidar ${DEPS_LIBRARIES})
-target_include_directories(Ortholidar PUBLIC ${DEPS_INCLUDE_DIRS})
-target_compile_options(Ortholidar PUBLIC ${DEPS_CFLAGS_OTHER})
+target_link_libraries(ortholidar ${DEPS_LIBRARIES})
+target_include_directories(ortholidar PUBLIC ${DEPS_INCLUDE_DIRS})
+target_compile_options(ortholidar PUBLIC ${DEPS_CFLAGS_OTHER})
