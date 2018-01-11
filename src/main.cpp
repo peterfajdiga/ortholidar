@@ -47,7 +47,8 @@ void calculateNormals(Las& las) {
         const Point3d& p = las[i];
         std::vector<const Point3d*> const neighborhood = tree->getNeighbors(p, NORMAL_RADIUS);
         if (neighborhood.empty()) {
-            // p is noise, don't add normal
+            // p is noise, remove p and don't add normal
+            las.setIncluded(i, false);
             continue;
         }
         neighbors += neighborhood.size();  // progress reporting
@@ -76,7 +77,8 @@ void calculateNormals(Las& las) {
         double eigenvalue2 = eigensolver.eigenvalues()[2];
         assert (eigenvalue0 <= eigenvalue1 && eigenvalue1 <= eigenvalue2);
         if (eigenvalue1 / eigenvalue0 > NOISE_THRESHOLD) {
-            // p is noise, don't add normal
+            // p is noise, remove p and don't add normal
+            las.setIncluded(i, false);
             continue;
         } else {
             const Eigen::Matrix3d& eigenvectors = eigensolver.eigenvectors();

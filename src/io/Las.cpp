@@ -78,10 +78,12 @@ bool Las::isIncluded(size_t const i) const {
     return entries[i].included;
 }
 
-void Las::setNormal(size_t const i, const Vector3d* normal) {
-    Entry& entry = entries[i];
-    entry.included = true;
-    entry.normal = normal;
+void Las::setIncluded(size_t const i, bool const included) {
+    entries[i].included = included;
+}
+
+void Las::setNormal(size_t const i, const Vector3d* const normal) {
+    entries[i].normal = normal;
 }
 
 void Las::setColor(size_t const i, const Color* color) {
@@ -122,14 +124,18 @@ void Las::save(const char* const outputFilename) const {
             point = reader->point;
 
             // add color
-            point.rgb[0] = entry.color->r;
-            point.rgb[1] = entry.color->g;
-            point.rgb[2] = entry.color->b;
+            if (entry.color != nullptr) {
+                point.rgb[0] = entry.color->r;
+                point.rgb[1] = entry.color->g;
+                point.rgb[2] = entry.color->b;
+            }
 
             // add normal
-            point.set_x(entry.normal->x);
-            point.set_y(entry.normal->y);
-            point.set_z(entry.normal->z);
+            if (entry.normal != nullptr) {
+                point.set_x(entry.normal->x);
+                point.set_y(entry.normal->y);
+                point.set_z(entry.normal->z);
+            }
 
             writer->write_point(&point);
         }

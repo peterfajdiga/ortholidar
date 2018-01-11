@@ -16,7 +16,7 @@ class Las {
 private:
     class Entry {
     public:
-        bool included = false;
+        bool included = true;
         const Point3d point;
         const Vector3d* normal = nullptr;
         const Color* color = nullptr;
@@ -45,6 +45,7 @@ public:
     const Point3d& operator[](size_t i) const;
     std::vector<const Point3d*> getPoints() const;  // use sparingly, prefer operator[]
     bool isIncluded(size_t i) const;
+    void setIncluded(size_t i, bool included);
     void setNormal(size_t i, const Vector3d* normal);
     void setColor(size_t i, const Color* color);
 
