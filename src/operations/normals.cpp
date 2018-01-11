@@ -4,13 +4,14 @@
 
 #include "normals.h"
 
+// free after use
 Vector3d* calculateNormal(const KDTree* tree, const Point3d& p, size_t& n_neighbors) {
     std::vector<const Point3d*> const neighborhood = tree->getNeighbors(p, normals::NORMAL_RADIUS);
     if (neighborhood.empty()) {
         // p is noise
         return nullptr;
     }
-    n_neighbors += neighborhood.size();
+    n_neighbors += neighborhood.size();  // progress reporting
 
     Eigen::Matrix3d covarianceMatrix;
     double& cov00 = covarianceMatrix(0,0);
@@ -58,6 +59,7 @@ Vector3d* calculateNormal(const KDTree* tree, const Point3d& p, size_t& n_neighb
     }
 }
 
+// free after use
 Vector3d* normals::calculateNormal(const KDTree* tree, const Point3d& p) {
     size_t ignore;
     return calculateNormal(tree, p, ignore);
@@ -71,12 +73,15 @@ void normals::calculateNormals(Las &las) {
     timer_tree.log("built tree");  // progress reporting
 
     size_t const n = las.size();
-    size_t n_neighbors = 0;  // progress reporting
-    Timer const timer_normals;  // progress reporting
+    size_t n_neighbors = 0;         // progress reporting
+    char progressStringBuffer[20];  // progress reporting
+    Timer const timer_normals;      // progress reporting
+    fprintf(stderr, "Progress            | Time per point | Avg neighbors \n");
     for (size_t i = 0; i < n; i++) {
-        if (i % 10000 == 0) {
+        if (i % 100000 == 0) {
             // progress reporting (the whole if-block)
-            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s. Average neighbors: %lf.", i, n, timer_normals.getDelta() / 1e6 / i, (double)n_neighbors / i);
+            snprintf(progressStringBuffer, 20, "%lu / %lu", i, n);
+            fprintf(stderr, "\r%19s | %14lf | %13lf", progressStringBuffer, timer_normals.getDelta() / 1e6 / i, (double)n_neighbors / i);
         }
 
         const Point3d& p = las[i];

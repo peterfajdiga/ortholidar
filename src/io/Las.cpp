@@ -131,11 +131,11 @@ void Las::save(const char* const outputFilename) const {
             }
 
             // add normal
-            if (entry.normal != nullptr) {
+            /*if (entry.normal != nullptr) {
                 point.set_x(entry.normal->x);
                 point.set_y(entry.normal->y);
                 point.set_z(entry.normal->z);
-            }
+            }*/
 
             writer->write_point(&point);
         }
