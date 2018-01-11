@@ -6,33 +6,33 @@
 
 
 
-void printNeighborhoodNormals(const Las& las, size_t const index, const char* const filename) {
+void printNeighborhoodNormals(const Las& las, size_t const index, const char* const pointsFilename, const char* normalsFilename) {
     std::vector<const Point3d*> points = las.getPoints();
     const KDTree* tree = KDTree::createTree(points);
     const std::vector<const Point3d*> neighborhood = tree->getNeighbors(las[index], normals::NORMAL_RADIUS);
-    std::vector<Vector3d*> normals;
-    for (const Point3d* const p : neighborhood) {
-        normals.push_back(normals::calculateNormal(tree, *p));
-    }
 
-    FILE* outFile = fopen(filename, "w");
-    if (outFile == nullptr) {
-        fprintf(stderr, "Error opening file %s\n", filename);
+    FILE* pointsFile = fopen(pointsFilename, "w");
+    if (pointsFile == nullptr) {
+        fprintf(stderr, "Error opening file %s\n", pointsFilename);
+        exit(1);
+    }
+    FILE* normalsFile = fopen(normalsFilename, "w");
+    if (normalsFile == nullptr) {
+        fprintf(stderr, "Error opening file %s\n", normalsFilename);
         exit(1);
     }
 
-    fprintf(outFile, "Points:\n");
     for (const Point3d* const p : neighborhood) {
-        fprintf(outFile, "%lf, %lf, %lf\n", p->x, p->y, p->z);
+        const Vector3d* const n = normals::calculateNormal(tree, *p);
+        if (n != nullptr) {
+            fprintf(pointsFile , "%lf, %lf, %lf\n", p->x, p->y, p->z);
+            fprintf(normalsFile, "%lf, %lf, %lf\n", n->x, n->y, n->z);
+            delete n;
+        }
     }
 
-    fprintf(outFile, "Normals:\n");
-    for (const Vector3d* const n : normals) {
-        fprintf(outFile, "%lf, %lf, %lf\n", n->x, n->y, n->z);
-        delete n;
-    }
-
-    fclose(outFile);
+    fclose(pointsFile);
+    fclose(normalsFile);
 }
 
 void colorPoints(Las& las, const char* const pngFilename) {
@@ -69,6 +69,7 @@ int main(int const argc, const char* const argv[]) {
     normals::calculateNormals(las);
     colorPoints(las, argv[2]);
     las.save(argv[3]);
+    //printNeighborhoodNormals(las, 2100531, "../data/matlab/points.csv", "../data/matlab/normals.csv");
 
     return 0;
 }
