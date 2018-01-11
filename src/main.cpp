@@ -8,7 +8,7 @@
 #include "misc.h"
 
 
-#define NORMAL_RADIUS 10.0
+#define NORMAL_RADIUS 2.0
 #define NOISE_THRESHOLD 200.0
 
 
@@ -37,9 +37,7 @@ void calculateNormals(Las& las) {
     for (size_t i = 0; i < n; i++) {
         if (i % 10000 == 0) {
             // progress reporting (the whole if-block)
-            double const avgNeighbors = (double)neighbors / i;
-            neighbors = 0;
-            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s. Average neighbors: %lf.", i, n, timer_normals.getDelta() / 1e6 / i, avgNeighbors);
+            fprintf(stderr, "\rCalculating normal for point: %lu / %lu. Time per point: %lf s. Average neighbors: %lf.", i, n, timer_normals.getDelta() / 1e6 / i, (double)neighbors / i);
         }
 
         const Point3d& p = las[i];
