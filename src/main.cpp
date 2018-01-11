@@ -114,7 +114,7 @@ void colorPoints(Las& las, const char* const pngFilename) {
             png::rgb_pixel_16 const pixelLowX  = misc::lerpPixel(pixelLowXLowY,  pixelLowXHighY,  misc::frac(pngY));
             png::rgb_pixel_16 const pixelHighX = misc::lerpPixel(pixelHighXLowY, pixelHighXHighY, misc::frac(pngY));
             png::rgb_pixel_16 const pixel = misc::lerpPixel(pixelLowX, pixelHighX, misc::frac(pngX));
-            las.setColor(i, new Color(pixel.red, pixel.green, pixel.blue));
+            las.setColor(i, new Color(pixel));
         }
     }
 }

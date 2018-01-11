@@ -8,9 +8,12 @@
 
 class Color {
 public:
-    unsigned short r, g, b;
+    unsigned short red, green, blue;
 
-    inline Color(unsigned short const r, unsigned short const g, unsigned short const b) : r(r), g(g), b(b) {}
+    inline Color(unsigned short const r, unsigned short const g, unsigned short const b) : red(r), green(g), blue(b) {}
+
+    template<class Pixel>
+    inline Color(const Pixel& p) : red(p.red), green(p.green), blue(p.blue) {}
 };
 
 

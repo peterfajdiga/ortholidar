@@ -125,9 +125,9 @@ void Las::save(const char* const outputFilename) const {
 
             // add color
             if (entry.color != nullptr) {
-                point.rgb[0] = entry.color->r;
-                point.rgb[1] = entry.color->g;
-                point.rgb[2] = entry.color->b;
+                point.rgb[0] = entry.color->red;
+                point.rgb[1] = entry.color->green;
+                point.rgb[2] = entry.color->blue;
             }
 
             // add normal

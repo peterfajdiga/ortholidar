@@ -14,7 +14,7 @@ namespace misc {
     }
 
     template<class Pixel>
-    Pixel lerpPixel(Pixel const min, Pixel const max, double const v) {
+    Pixel lerpPixel(const Pixel& min, const Pixel& max, double const v) {
         Pixel p;
         p.red = lerp(min.red, max.red, v);
         p.green = lerp(min.green, max.green, v);
