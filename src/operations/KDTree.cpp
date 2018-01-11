@@ -57,13 +57,13 @@ KDTree* KDTree::createTree(std::vector<const Point3d*>& points,
     return newNode;
 }
 
-std::vector<const Point3d*> KDTree::getNeighbors(const Point3d& target, double const radius) {
+std::vector<const Point3d*> KDTree::getNeighbors(const Point3d& target, double const radius) const {
     std::vector<const Point3d*> neighbors;
     getNeighbors(neighbors, target, radius);
     return neighbors;
 }
 
-void KDTree::getNeighbors(std::vector<const Point3d*>& neighbors, const Point3d& target, double const radius) {
+void KDTree::getNeighbors(std::vector<const Point3d*>& neighbors, const Point3d& target, double const radius) const {
     double const thisPos = p.coord(axis);
     double const targetPos = target.coord(axis);
 

@@ -5,6 +5,7 @@
 #ifndef ORTHOLIDAR_MISC_H
 #define ORTHOLIDAR_MISC_H
 
+
 namespace misc {
     double frac(double v);
 
@@ -29,5 +30,6 @@ namespace misc {
         min.blue = lerp(min.blue, max.blue, v);
     }
 }
+
 
 #endif //ORTHOLIDAR_MISC_H

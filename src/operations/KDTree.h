@@ -7,8 +7,8 @@
 
 
 #include <vector>
-#include "containers/Point3d.h"
-#include "io/Las.h"
+#include "../containers/Point3d.h"
+#include "../io/Las.h"
 
 class KDTree {
 private:
@@ -27,7 +27,7 @@ public:
     static KDTree* createTree(const std::vector<Point3d*>& points);
     static KDTree* createTree(std::vector<const Point3d*>& points);  // reorders elements of given vector
 
-    std::vector<const Point3d*> getNeighbors(const Point3d& target, double radius);
+    std::vector<const Point3d*> getNeighbors(const Point3d& target, double radius) const;
 
 private:
     static KDTree* createTree(std::vector<const Point3d*>& points,  // reorders elements of given vector
@@ -35,7 +35,7 @@ private:
                               const std::vector<const Point3d*>::iterator& end,
                               int depth);
 
-    void getNeighbors (std::vector<const Point3d*>& neighbors, const Point3d& target, double radius);
+    void getNeighbors (std::vector<const Point3d*>& neighbors, const Point3d& target, double radius) const;
 };
 
 
