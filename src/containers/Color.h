@@ -10,6 +10,8 @@ class Color {
 public:
     unsigned short red, green, blue;
 
+    Color() = default;
+
     inline Color(unsigned short const r, unsigned short const g, unsigned short const b) : red(r), green(g), blue(b) {}
 
     template<class Pixel>

@@ -107,14 +107,14 @@ void colorPoints(Las& las, const char* const pngFilename) {
             double const y01 = 1 - (p.y - las.getMinY()) / (las.getMaxY() - las.getMinY());
             double const pngX = x01 * (orthophoto.get_width()  - 1);  // x coordinate in png space
             double const pngY = y01 * (orthophoto.get_height() - 1);  // y coordinate in png space
-            png::rgb_pixel_16 const pixelLowXLowY   = orthophoto.get_pixel(floor(pngX), floor(pngY));
-            png::rgb_pixel_16 const pixelLowXHighY  = orthophoto.get_pixel(floor(pngX), ceil (pngY));
-            png::rgb_pixel_16 const pixelHighXLowY  = orthophoto.get_pixel(ceil (pngX), floor(pngY));
-            png::rgb_pixel_16 const pixelHighXHighY = orthophoto.get_pixel(ceil (pngX), ceil (pngY));
-            png::rgb_pixel_16 const pixelLowX  = misc::lerpPixel(pixelLowXLowY,  pixelLowXHighY,  misc::frac(pngY));
-            png::rgb_pixel_16 const pixelHighX = misc::lerpPixel(pixelHighXLowY, pixelHighXHighY, misc::frac(pngY));
-            png::rgb_pixel_16 const pixel = misc::lerpPixel(pixelLowX, pixelHighX, misc::frac(pngX));
-            las.setColor(i, new Color(pixel));
+            Color       pixelLowXLowY   = orthophoto.get_pixel(floor(pngX), floor(pngY));
+            Color const pixelLowXHighY  = orthophoto.get_pixel(floor(pngX), ceil (pngY));
+            Color       pixelHighXLowY  = orthophoto.get_pixel(ceil (pngX), floor(pngY));
+            Color const pixelHighXHighY = orthophoto.get_pixel(ceil (pngX), ceil (pngY));
+            misc::lerpPixelInplace(pixelLowXLowY,  pixelLowXHighY,  misc::frac(pngY));
+            misc::lerpPixelInplace(pixelHighXLowY, pixelHighXHighY, misc::frac(pngY));
+            misc::lerpPixelInplace(pixelLowXLowY, pixelHighXLowY, misc::frac(pngX));
+            las.setColor(i, new Color(pixelLowXLowY));
         }
     }
 }

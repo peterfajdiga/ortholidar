@@ -21,6 +21,13 @@ namespace misc {
         p.blue = lerp(min.blue, max.blue, v);
         return p;
     }
+
+    template<class Pixel>
+    void lerpPixelInplace(Pixel& min, const Pixel& max, double const v) {
+        min.red = lerp(min.red, max.red, v);
+        min.green = lerp(min.green, max.green, v);
+        min.blue = lerp(min.blue, max.blue, v);
+    }
 }
 
 #endif //ORTHOLIDAR_MISC_H
