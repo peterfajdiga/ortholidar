@@ -15,7 +15,7 @@
 
 namespace normals {
     static const double NORMAL_RADIUS = 2.0;
-    static const double NOISE_THRESHOLD = 200.0;
+    static const double NOISE_THRESHOLD = 1.2;
 
     // free after use
     Vector3d* calculateNormal(const KDTree* tree, const Point3d& p);

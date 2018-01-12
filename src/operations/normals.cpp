@@ -44,7 +44,7 @@ Vector3d* calculateNormal(const KDTree* tree, const Point3d& p, size_t& n_neighb
     double eigenvalue0 = eigensolver.eigenvalues()[0];
     double eigenvalue1 = eigensolver.eigenvalues()[1];
     assert (eigenvalue0 <= eigenvalue1 && eigenvalue1 <= eigensolver.eigenvalues()[2]);
-    if (eigenvalue1 / eigenvalue0 > normals::NOISE_THRESHOLD) {
+    if (eigenvalue1 / eigenvalue0 < normals::NOISE_THRESHOLD) {
         // p is noise
         return nullptr;
     } else {
